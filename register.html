@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yangi Ishchi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen flex items-center justify-center p-4">
+
+<div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
+    
+    <a href="Ottimo_SIMPLE.html" style="text-decoration: none; color: #888; font-size: 14px;">← Orqaga</a>
+    
+    <h1 style="font-size: 28px; font-weight: bold; color: #f97316; margin: 20px 0 10px 0;">➕ Yangi Ishchi</h1>
+    <p style="color: #888; margin-bottom: 25px;">Ro'yxatdan o'tish</p>
+
+    <input type="text" id="firstname" placeholder="Ism" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-size: 13px; box-sizing: border-box;">
+    
+    <input type="text" id="lastname" placeholder="Familiya" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-size: 13px; box-sizing: border-box;">
+    
+    <input type="number" id="age" placeholder="Yosh" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-size: 13px; box-sizing: border-box;">
+    
+    <input type="text" id="passport" placeholder="Pasport ID" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-size: 13px; box-sizing: border-box;">
+    
+    <input type="text" id="address" placeholder="Manzil" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-size: 13px; box-sizing: border-box;">
+    
+    <input type="text" id="prevCompany" placeholder="Oldin ishlagan joy" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-size: 13px; box-sizing: border-box;">
+    
+    <input type="text" id="prevPosition" placeholder="Oldin lavozim" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-size: 13px; box-sizing: border-box;">
+    
+    <select id="branch" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; font-size: 13px; box-sizing: border-box;">
+        <option value="">-- Filial tanlang --</option>
+        <option value="Parus">Parus filial</option>
+        <option value="Nukus">Nukus filal</option>
+    </select>
+
+    <button onclick="register()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #f97316, #c2410c); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer;">
+        ✓ Ro'yxatdan O'tish
+    </button>
+
+    <div id="message" style="margin-top: 20px; padding: 12px; border-radius: 8px; text-align: center; display: none; font-size: 13px;"></div>
+
+</div>
+
+<script>
+function register() {
+    const data = {
+        firstname: document.getElementById('firstname').value,
+        lastname: document.getElementById('lastname').value,
+        age: document.getElementById('age').value,
+        passport: document.getElementById('passport').value,
+        address: document.getElementById('address').value,
+        prevCompany: document.getElementById('prevCompany').value,
+        prevPosition: document.getElementById('prevPosition').value,
+        branch: document.getElementById('branch').value
+    };
+    
+    const msg = document.getElementById('message');
+    
+    if (!data.firstname || !data.lastname || !data.age || !data.passport || !data.address || !data.branch) {
+        msg.textContent = '❌ Muhim maydonlarni to\'ldiring!';
+        msg.style.background = '#fee2e2';
+        msg.style.color = '#991b1b';
+        msg.style.display = 'block';
+        return;
+    }
+    
+    localStorage.setItem('newEmployee', JSON.stringify(data));
+    msg.textContent = '✅ Ro\'yxatdan o\'tish tugatildi! Rahbar tasdiq berilgach login beradi.';
+    msg.style.background = '#dcfce7';
+    msg.style.color = '#166534';
+    msg.style.display = 'block';
+    
+    setTimeout(() => {
+        window.location.href = 'Ottimo_SIMPLE.html';
+    }, 2000);
+}
+</script>
+
+</body>
+</html>

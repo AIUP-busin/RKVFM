@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ishchi Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen p-6">
+
+<div style="max-width: 600px; margin: 0 auto;">
+
+    <!-- Header -->
+    <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 style="font-size: 28px; font-weight: bold; color: #047857; margin: 0;">OTTIMO PRO</h1>
+            <p id="empName" style="color: #888; margin: 5px 0 0 0;"></p>
+        </div>
+        <button onclick="logout()" style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+            Chiqish
+        </button>
+    </div>
+
+    <!-- Shift Info -->
+    <div style="background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 15px 0;">📅 Bugungi Smeya</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div style="background: #dbeafe; padding: 15px; border-radius: 8px;">
+                <p style="color: #1e40af; font-size: 12px; margin: 0;">Kelish Vaqti</p>
+                <p style="font-size: 32px; font-weight: bold; color: #1e40af; margin: 5px 0 0 0;">7:30</p>
+            </div>
+            <div style="background: #fed7aa; padding: 15px; border-radius: 8px;">
+                <p style="color: #92400e; font-size: 12px; margin: 0;">Ketish Vaqti</p>
+                <p style="font-size: 32px; font-weight: bold; color: #92400e; margin: 5px 0 0 0;">16:30</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Time & Check-in -->
+    <div style="background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 15px 0;">⏰ Davomat</h2>
+        
+        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="color: #888; font-size: 12px; margin: 0;">Hozirgi Vaqt</p>
+            <p id="currentTime" style="font-size: 28px; font-weight: bold; color: #1f2937; margin: 5px 0 0 0;">00:00</p>
+        </div>
+
+        <div id="shiftMessage" style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-bottom: 15px; color: #92400e; font-size: 13px;">
+            ⏳ Smeya vaqtini kutmoqdasiz...
+        </div>
+
+        <button id="checkinBtn" onclick="checkIn()" disabled style="width: 100%; padding: 14px; background: #ccc; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: not-allowed;">
+            ✅ Check-In (Kelish)
+        </button>
+    </div>
+
+    <!-- Status -->
+    <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 15px 0;">📊 Bugungi Holatim</h2>
+        <div style="space-y: 10px;">
+            <div style="display: flex; justify-content: space-between; padding: 12px; background: #f9fafb; border-radius: 8px; margin-bottom: 10px;">
+                <span style="color: #666;">Kelish Vaqti:</span>
+                <span id="empCheckin" style="font-weight: bold;">-</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 12px; background: #f9fafb; border-radius: 8px;">
+                <span style="color: #666;">Status:</span>
+                <span id="empStatus" style="font-weight: bold; background: #e5e7eb; padding: 2px 8px; border-radius: 4px;">Kutilmoqda</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem('user'));
+if (!user || user.role !== 'employee') {
+    window.location.href = 'Ottimo_SIMPLE.html';
+}
+document.getElementById('empName').textContent = 'Salom, ' + user.username + '!';
+
+// Update time
+setInterval(() => {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('currentTime').textContent = h + ':' + m;
+    
+    const currentMin = now.getHours() * 60 + now.getMinutes();
+    const shiftMin = 7 * 60 + 30; // 7:30
+    const btn = document.getElementById('checkinBtn');
+    const msg = document.getElementById('shiftMessage');
+    
+    if (currentMin >= shiftMin) {
+        btn.disabled = false;
+        btn.style.background = '#10b981';
+        btn.style.cursor = 'pointer';
+        msg.style.background = '#dcfce7';
+        msg.style.color = '#166534';
+        msg.textContent = '✅ Smeya boshlanardi! Check-in qila olasiz.';
+    } else {
+        btn.disabled = true;
+        btn.style.background = '#ccc';
+        btn.style.cursor = 'not-allowed';
+        const diff = shiftMin - currentMin;
+        const h = Math.floor(diff / 60);
+        const m = diff % 60;
+        msg.textContent = `⏳ Smeya boshlanishiga ${h}h ${m}m qoldi.`;
+    }
+}, 1000);
+
+function checkIn() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const time = h + ':' + m;
+    
+    document.getElementById('empCheckin').textContent = time;
+    document.getElementById('empStatus').textContent = '✅ O\'z vaqti';
+    document.getElementById('empStatus').style.background = '#dcfce7';
+    document.getElementById('empStatus').style.color = '#166534';
+    
+    alert('✅ Check-in muvaffaqiyatli!');
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    window.location.href = 'Ottimo_SIMPLE.html';
+}
+</script>
+
+</body>
+</html>
