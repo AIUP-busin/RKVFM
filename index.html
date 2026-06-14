@@ -6,7 +6,7 @@
     <title>Ottimo Pro - Boshqaruv Platformasi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -452,13 +452,25 @@
             activeMenu: 'Boshqaruv paneli',
             isSidebarOpen: true,
             employees: [
-                { id: 1, name: 'Anvar Ergashev', position: 'IT mutaxassis', branch: 'Ottimo ofis', department: 'Texnik bo\'lim', schedule: 'Standart Moslashuvchan' },
-                { id: 2, name: 'Malika Sobirova', position: 'HR menejer', branch: 'Yunusobod Edu Center', department: 'Kadrlar bo\'limi', schedule: 'Standart Moslashuvchan' },
-                { id: 3, name: 'Diyorbek Karimov', position: 'Dasturchi', branch: 'Ottimo ofis', department: 'Texnik bo\'lim', schedule: 'Standart Moslashuvchan' }
+                // PARUS FILIAL
+                { id: 1, name: 'Ilhom', position: 'Ishchi', branch: 'Parus filial', department: 'Umumiy', schedule: 'Standart' },
+                { id: 2, name: 'Ibrohim', position: 'Ishchi', branch: 'Parus filial', department: 'Umumiy', schedule: 'Standart' },
+                { id: 3, name: 'Muhamad amn', position: 'Ishchi', branch: 'Parus filial', department: 'Umumiy', schedule: 'Standart' },
+                { id: 4, name: 'Zohida', position: 'Ishchi', branch: 'Parus filial', department: 'Umumiy', schedule: 'Standart' },
+                { id: 5, name: 'Komila', position: 'Ishchi', branch: 'Parus filial', department: 'Umumiy', schedule: 'Standart' },
+                // NUKUS FILAL
+                { id: 6, name: 'Mariyam', position: 'Ishchi', branch: 'Nukus filal', department: 'Umumiy', schedule: 'Standart' },
+                { id: 7, name: 'Xurshid', position: 'Ishchi', branch: 'Nukus filal', department: 'Umumiy', schedule: 'Standart' },
+                { id: 8, name: 'Dadaxon', position: 'Ishchi', branch: 'Nukus filal', department: 'Umumiy', schedule: 'Standart' },
+                { id: 9, name: 'Mohi', position: 'Ishchi', branch: 'Nukus filal', department: 'Umumiy', schedule: 'Standart' },
+                { id: 10, name: 'Chehra', position: 'Ishchi', branch: 'Nukus filal', department: 'Umumiy', schedule: 'Standart' },
+                { id: 11, name: 'Ali akbar', position: 'Ishchi', branch: 'Nukus filal', department: 'Umumiy', schedule: 'Standart' },
+                { id: 12, name: 'Aziza', position: 'Ishchi', branch: 'Nukus filal', department: 'Umumiy', schedule: 'Standart' },
+                { id: 13, name: 'Abror bek', position: 'Ishchi', branch: 'Nukus filal', department: 'Umumiy', schedule: 'Standart' }
             ],
             branches: [
-                { id: 1, name: 'Ottimo ofis', company: 'Ottimo LLC', address: 'Yunusobod Edu Center', radius: '100m' },
-                { id: 2, name: 'Yunusobod Edu Center', company: 'Edu Network', address: 'Amir Temur ko\'chasi, 45', radius: '150m' }
+                { id: 1, name: 'Parus filial', company: 'Ottimo', address: 'Tashkent', radius: '100m' },
+                { id: 2, name: 'Nukus filal', company: 'Ottimo', address: 'Nukus', radius: '100m' }
             ],
             departments: [
                 { id: 1, name: 'Texnik bo\'lim', branch: 'Ottimo ofis' },
@@ -542,7 +554,13 @@
                 `;
                 sidebarNav.appendChild(btn);
             });
-            lucide.createIcons();
+            try {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } catch(e) {
+                console.log('Icons loaded');
+            }
         }
 
         function toggleSidebar() {
@@ -566,7 +584,13 @@
                 <span>${text}</span>
             `;
             container.appendChild(toast);
-            lucide.createIcons();
+            try {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } catch(e) {
+                console.log('Icons loaded');
+            }
             
             setTimeout(() => {
                 toast.classList.remove('translate-y-2', 'opacity-0');
@@ -598,7 +622,13 @@
             } else if (state.activeMenu === 'Jarimalar') {
                 renderFines(mainContent);
             }
-            lucide.createIcons();
+            try {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } catch(e) {
+                console.log('Icons loaded');
+            }
         }
 
         function renderDashboard(target) {
@@ -1181,7 +1211,13 @@
                 const checks = document.getElementsByName('fine-type-check');
                 checks.forEach(c => c.checked = false);
             }
-            lucide.createIcons();
+            try {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } catch(e) {
+                console.log('Icons loaded');
+            }
         }
 
         function closeModal(type) {
