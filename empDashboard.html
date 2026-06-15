@@ -1,132 +1,1753 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="h-full bg-gray-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ishchi Dashboard</title>
+    <title>Ottimo Pro - Boshqaruv Platformasi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen p-6">
+<body class="h-full overflow-hidden flex flex-col">
 
-<div style="max-width: 600px; margin: 0 auto;">
-
-    <!-- Header -->
-    <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <h1 style="font-size: 28px; font-weight: bold; color: #047857; margin: 0;">OTTIMO PRO</h1>
-            <p id="empName" style="color: #888; margin: 5px 0 0 0;"></p>
-        </div>
-        <button onclick="logout()" style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-            Chiqish
-        </button>
-    </div>
-
-    <!-- Shift Info -->
-    <div style="background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 15px 0;">📅 Bugungi Smeya</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div style="background: #dbeafe; padding: 15px; border-radius: 8px;">
-                <p style="color: #1e40af; font-size: 12px; margin: 0;">Kelish Vaqti</p>
-                <p style="font-size: 32px; font-weight: bold; color: #1e40af; margin: 5px 0 0 0;">7:30</p>
-            </div>
-            <div style="background: #fed7aa; padding: 15px; border-radius: 8px;">
-                <p style="color: #92400e; font-size: 12px; margin: 0;">Ketish Vaqti</p>
-                <p style="font-size: 32px; font-weight: bold; color: #92400e; margin: 5px 0 0 0;">16:30</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Time & Check-in -->
-    <div style="background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 15px 0;">⏰ Davomat</h2>
+    <div class="flex h-full w-full overflow-hidden">
         
-        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <p style="color: #888; font-size: 12px; margin: 0;">Hozirgi Vaqt</p>
-            <p id="currentTime" style="font-size: 28px; font-weight: bold; color: #1f2937; margin: 5px 0 0 0;">00:00</p>
-        </div>
+        <!-- Sidebar Menu -->
+        <aside id="sidebar" class="w-64 bg-white border-r flex flex-col transition-all duration-300 z-40">
+            <div class="p-6 border-b flex justify-between items-center bg-gray-50/50">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl font-black text-emerald-800 tracking-tight">Ottimo</span>
+                    <span class="text-[10px] bg-emerald-100 text-emerald-800 font-mono font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Pro</span>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto" id="sidebar-nav">
+                <!-- Navigation links generated dynamically by JS -->
+            </nav>
+            
+            <div class="p-4 border-t bg-gray-50/50">
+                <button onclick="showNotification('Tizimdan muvaffaqiyatli chiqildi!')" class="w-full flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    <span>Chiqish</span>
+                </button>
+            </div>
+        </aside>
 
-        <div id="shiftMessage" style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-bottom: 15px; color: #92400e; font-size: 13px;">
-            ⏳ Smeya vaqtini kutmoqdasiz...
-        </div>
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            
+            <!-- Header bar -->
+            <header class="bg-white border-b h-16 flex items-center justify-between px-6 shadow-sm shrink-0">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    <div class="relative max-w-xs hidden sm:block">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </span>
+                        <input type="text" id="global-search" oninput="handleGlobalSearch(this.value)" placeholder="Qidiruv..." class="w-full pl-9 pr-4 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
 
-        <button id="checkinBtn" onclick="checkIn()" disabled style="width: 100%; padding: 14px; background: #ccc; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: not-allowed;">
-            ✅ Check-In (Kelish)
-        </button>
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleAiWidget()" class="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-xs font-bold border border-emerald-200 hover:bg-emerald-100 transition-all shadow-sm">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-emerald-600 animate-pulse"></i>
+                        <span>AI Yordamchi</span>
+                    </button>
+                    
+                    <div class="flex items-center gap-2 text-sm text-gray-500 font-medium">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span class="hidden md:inline">Tizim faol</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Content Window -->
+            <main class="flex-1 overflow-y-auto p-6" id="main-content">
+                <!-- Page layout loaded here dynamically -->
+            </main>
+        </div>
     </div>
 
-    <!-- Status -->
-    <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 15px 0;">📊 Bugungi Holatim</h2>
-        <div style="space-y: 10px;">
-            <div style="display: flex; justify-content: space-between; padding: 12px; background: #f9fafb; border-radius: 8px; margin-bottom: 10px;">
-                <span style="color: #666;">Kelish Vaqti:</span>
-                <span id="empCheckin" style="font-weight: bold;">-</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; padding: 12px; background: #f9fafb; border-radius: 8px;">
-                <span style="color: #666;">Status:</span>
-                <span id="empStatus" style="font-weight: bold; background: #e5e7eb; padding: 2px 8px; border-radius: 4px;">Kutilmoqda</span>
+    <!-- Custom Notifications Toast -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <!-- Modal: Manual Attendance (Qo'lda davomat) -->
+    <div id="modal-attendance" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl relative animate-scale-up">
+            <button onclick="closeModal('attendance')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-lg font-bold mb-4 text-gray-900">Qo'lda davomat yaratish</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 mb-1 block">XODIM</label>
+                    <select id="att-employee" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50/50">
+                        <option value="">Xodimni tanlang</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-gray-500 mb-1 block">FILIAL</label>
+                    <select id="att-branch" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50/50">
+                        <option value="">Shoxobchani tanlang</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 mb-1 block">Sana</label>
+                        <input type="date" id="att-date" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50/50 font-mono">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 mb-1 block">Vaqt</label>
+                        <input type="time" id="att-time" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50/50 font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 mb-1 block">Izoh (Ixtiyoriy)</label>
+                    <textarea id="att-note" class="w-full p-2.5 border border-gray-200 rounded-lg h-20 text-sm bg-gray-50/50" placeholder="Izoh"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-2">
+                    <button onclick="submitAttendance('Ketish')" class="bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-xl font-bold text-sm transition-all shadow-sm">Ketish</button>
+                    <button onclick="submitAttendance('Kelish')" class="bg-amber-400 hover:bg-amber-500 text-white py-3 rounded-xl font-bold text-sm transition-all shadow-sm">Kelish</button>
+                </div>
             </div>
         </div>
     </div>
 
-</div>
+    <!-- Modal: Add Employee (Xodim qo'shish) -->
+    <div id="modal-employee" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl relative">
+            <button onclick="closeModal('employee')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-lg font-bold mb-4 text-gray-900">Yangi xodim qo'shish</h2>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <label class="block mb-1 font-semibold">Ism va Familiya</label>
+                    <input type="text" id="emp-name" placeholder="Ism Familiya" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Username (Login)</label>
+                    <input type="text" id="emp-username" placeholder="username" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Parol</label>
+                    <input type="password" id="emp-password" placeholder="Parol" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Lavozim</label>
+                    <select id="emp-position" class="w-full p-2.5 border border-gray-200 rounded-lg"></select>
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Filial</label>
+                    <select id="emp-branch" class="w-full p-2.5 border border-gray-200 rounded-lg"></select>
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Bo'lim</label>
+                    <select id="emp-dept" class="w-full p-2.5 border border-gray-200 rounded-lg"></select>
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Ish jadvali</label>
+                    <select id="emp-schedule" class="w-full p-2.5 border border-gray-200 rounded-lg"></select>
+                </div>
+                <div class="pt-4 flex justify-end gap-2">
+                    <button onclick="closeModal('employee')" class="px-4 py-2 border rounded-lg text-xs">Bekor qilish</button>
+                    <button onclick="submitEmployee()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm">Qo'shish</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script>
-const user = JSON.parse(localStorage.getItem('user'));
-if (!user || user.role !== 'employee') {
-    window.location.href = 'Ottimo_SIMPLE.html';
-}
-document.getElementById('empName').textContent = 'Salom, ' + user.username + '!';
+    <!-- Modal: Add Branch (Yangi Shoxobcha) -->
+    <div id="modal-branch" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl relative">
+            <button onclick="closeModal('branch')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-lg font-bold mb-4 text-gray-900">Yangi shoxobcha yaratish</h2>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <label class="block mb-1 font-semibold">Nomi</label>
+                    <input type="text" id="branch-name" placeholder="Masalan: Yunusobod filiali" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Kompaniya</label>
+                    <input type="text" id="branch-company" value="Ottimo" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Manzil</label>
+                    <input type="text" id="branch-address" placeholder="Tashkent sh." class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Radius (metrda)</label>
+                    <input type="text" id="branch-radius" placeholder="100m" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div class="pt-4 flex justify-end gap-2">
+                    <button onclick="closeModal('branch')" class="px-4 py-2 border rounded-lg text-xs">Bekor qilish</button>
+                    <button onclick="submitBranch()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm">Yaratish</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-// Update time
-setInterval(() => {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('currentTime').textContent = h + ':' + m;
-    
-    const currentMin = now.getHours() * 60 + now.getMinutes();
-    const shiftMin = 7 * 60 + 30; // 7:30
-    const btn = document.getElementById('checkinBtn');
-    const msg = document.getElementById('shiftMessage');
-    
-    if (currentMin >= shiftMin) {
-        btn.disabled = false;
-        btn.style.background = '#10b981';
-        btn.style.cursor = 'pointer';
-        msg.style.background = '#dcfce7';
-        msg.style.color = '#166534';
-        msg.textContent = '✅ Smeya boshlanardi! Check-in qila olasiz.';
-    } else {
-        btn.disabled = true;
-        btn.style.background = '#ccc';
-        btn.style.cursor = 'not-allowed';
-        const diff = shiftMin - currentMin;
-        const h = Math.floor(diff / 60);
-        const m = diff % 60;
-        msg.textContent = `⏳ Smeya boshlanishiga ${h}h ${m}m qoldi.`;
-    }
-}, 1000);
+    <!-- Modal: Add Department (Bo'lim qo'shish) -->
+    <div id="modal-department" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl relative">
+            <button onclick="closeModal('department')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-lg font-bold mb-4">Yangi bo'lim qo'shish</h2>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <label class="block mb-1 font-semibold">Bo'lim nomi</label>
+                    <input type="text" id="dept-name" placeholder="Texnik bo'lim" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Filialni tanlang</label>
+                    <select id="dept-branch" class="w-full p-2.5 border border-gray-200 rounded-lg"></select>
+                </div>
+                <div class="pt-4 flex justify-end gap-2">
+                    <button onclick="closeModal('department')" class="px-4 py-2 border rounded-lg text-xs">Bekor qilish</button>
+                    <button onclick="submitDepartment()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm">Qo'shish</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-function checkIn() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const time = h + ':' + m;
-    
-    document.getElementById('empCheckin').textContent = time;
-    document.getElementById('empStatus').textContent = '✅ O\'z vaqti';
-    document.getElementById('empStatus').style.background = '#dcfce7';
-    document.getElementById('empStatus').style.color = '#166534';
-    
-    alert('✅ Check-in muvaffaqiyatli!');
-}
+    <!-- Modal: Add Position (Lavozim qo'shish) -->
+    <div id="modal-position" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl relative">
+            <button onclick="closeModal('position')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-lg font-bold mb-4">Yangi lavozim qo'shish</h2>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <label class="block mb-1 font-semibold">Lavozim nomi</label>
+                    <input type="text" id="pos-name" placeholder="Dasturchi" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Maosh (UZS)</label>
+                    <input type="text" id="pos-salary" placeholder="5,000,000 UZS" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div class="pt-4 flex justify-end gap-2">
+                    <button onclick="closeModal('position')" class="px-4 py-2 border rounded-lg text-xs">Bekor qilish</button>
+                    <button onclick="submitPosition()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm">Qo'shish</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-function logout() {
-    localStorage.removeItem('user');
-    window.location.href = 'Ottimo_SIMPLE.html';
-}
-</script>
+    <!-- Modal: Add Fine (Jarima yaratish) -->
+    <div id="modal-fine" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl relative">
+            <button onclick="closeModal('fine')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-lg font-bold mb-4">Yangi jarima qoidasi</h2>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <label class="block mb-1 font-semibold">Jarima qoidasi nomi</label>
+                    <input type="text" id="fine-name" placeholder="Kech qolish jarimasi" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Jarima turlari (Tanlang)</label>
+                    <div class="space-y-2 border p-3 rounded-lg max-h-36 overflow-y-auto bg-gray-50">
+                        <label class="flex items-center gap-2"><input type="checkbox" name="fine-type-check" value="Kech kelish" class="w-4 h-4 rounded text-emerald-600"> <span>Kech kelish</span></label>
+                        <label class="flex items-center gap-2"><input type="checkbox" name="fine-type-check" value="Erta ketish" class="w-4 h-4 rounded text-emerald-600"> <span>Erta ketish</span></label>
+                        <label class="flex items-center gap-2"><input type="checkbox" name="fine-type-check" value="Chiqish yo'q" class="w-4 h-4 rounded text-emerald-600"> <span>Chiqish yo'q</span></label>
+                        <label class="flex items-center gap-2"><input type="checkbox" name="fine-type-check" value="Kelmagan kun" class="w-4 h-4 rounded text-emerald-600"> <span>Kelmagan kun</span></label>
+                    </div>
+                </div>
+                <div class="pt-4 flex justify-end gap-2">
+                    <button onclick="closeModal('fine')" class="px-4 py-2 border rounded-lg text-xs">Bekor qilish</button>
+                    <button onclick="submitFine()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm">Yaratish</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal: Add Schedule (Yangi jadval) -->
+    <div id="modal-schedule" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-2xl my-10 shadow-2xl relative">
+            <button onclick="closeModal('schedule')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-xl font-bold mb-4">Yangi jadval</h2>
+
+            <!-- AI Schedular Assistance Box -->
+            <div class="mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                <label class="block text-xs font-bold text-emerald-800 mb-1">✨ AI JADVAL YORDAMCHISI (GEMINI)</label>
+                <p class="text-[11px] text-emerald-700 mb-2">Ish vaqtlarini qanday so'rasangiz, sun'iy intellekt jadvalni xuddi shunday to'ldirib beradi.</p>
+                <div class="flex gap-2">
+                    <input type="text" id="ai-schedule-prompt" placeholder="Masalan: 'Dushanba-Juma 08:00 dan 17:00 gacha, Shanba yarim kun'" class="flex-1 p-2.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-emerald-500 outline-none bg-white">
+                    <button onclick="triggerAiScheduleGeneration()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shrink-0 transition-all shadow-sm">
+                        <span>✨ Yaratish</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div>
+                    <label class="block mb-2 font-semibold text-sm">Turi</label>
+                    <div class="flex bg-gray-100 p-1 rounded-xl">
+                        <button class="flex-1 bg-white shadow-sm py-2 rounded-lg text-xs font-bold text-emerald-700">Moslashuvchan</button>
+                        <button type="button" disabled class="flex-1 py-2 text-xs text-gray-400 cursor-not-allowed">Gibrid</button>
+                        <button type="button" disabled class="flex-1 py-2 text-xs text-gray-400 cursor-not-allowed">Erkin</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-semibold text-sm">Nomi</label>
+                    <input type="text" id="sch-name" class="w-full p-3 border border-gray-200 rounded-lg text-sm" placeholder="Ish kuni">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-2 font-semibold text-sm">Boshlanish sanasi</label>
+                        <input type="date" id="sch-start-date" class="w-full p-3 border border-gray-200 rounded-lg text-sm font-mono">
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold text-sm">Sikl (kunlik)</label>
+                        <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                            <button onclick="adjustCycle(-1)" class="p-3 hover:bg-gray-50 text-gray-500 font-bold">-</button>
+                            <input type="text" id="sch-cycle" readonly class="w-full text-center p-3 text-sm bg-white font-bold" value="7">
+                            <button onclick="adjustCycle(1)" class="p-3 hover:bg-gray-50 text-gray-500 font-bold">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between py-2 border-t">
+                    <span class="text-sm font-semibold">Qo'shimcha ish vaqtini hisoblash:</span>
+                    <input type="checkbox" id="sch-has-overtime" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500" onchange="toggleOvertimeDiv(this.checked)">
+                </div>
+
+                <div id="overtime-hours-div" class="hidden">
+                    <label class="block mb-2 font-semibold text-sm">Uzaytirilgan ish vaqti</label>
+                    <input type="number" id="sch-overtime-hours" class="p-3 border border-gray-200 rounded-lg text-sm w-32" value="4">
+                </div>
+
+                <!-- Day details -->
+                <div class="border-t pt-4">
+                    <h3 class="font-bold mb-4 text-sm text-gray-700">Moslashuvchan jadval tafsilotlari</h3>
+                    <div class="space-y-4 max-h-60 overflow-y-auto pr-2" id="schedules-days-list">
+                        <!-- Dynamic generated days (1 to 7) -->
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t">
+                    <button onclick="closeModal('schedule')" class="px-6 py-2 border border-gray-200 rounded-lg text-sm font-semibold">Bekor qilish</button>
+                    <button onclick="submitSchedule()" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition-all shadow-sm">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Holiday (Bayram qo'shish) -->
+    <div id="modal-holiday" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl relative">
+            <button onclick="closeModal('holiday')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-lg font-bold mb-4">Bayram qo'shish</h2>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <label class="block mb-1 font-semibold">Bayram nomi</label>
+                    <input type="text" id="hol-name" placeholder="Mustaqillik kuni" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Sana</label>
+                    <input type="date" id="hol-date" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Qamrov</label>
+                    <select id="hol-scope" class="w-full p-2.5 border border-gray-200 rounded-lg"></select>
+                </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Istisnolar</label>
+                    <input type="text" id="hol-exceptions" placeholder="Xavfsizlik bo'limi" class="w-full p-2.5 border border-gray-200 rounded-lg">
+                </div>
+                <div class="pt-4 flex justify-end gap-2">
+                    <button onclick="closeModal('holiday')" class="px-4 py-2 border rounded-lg text-xs">Bekor qilish</button>
+                    <button onclick="submitHoliday()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm">Yaratish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating AI Chat panel -->
+    <div id="ai-chat-panel" class="fixed right-6 bottom-6 w-96 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 hidden flex-col overflow-hidden animate-slide-up">
+        <div class="bg-emerald-800 p-4 text-white flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-5 h-5 text-emerald-200 animate-spin"></i>
+                <div>
+                    <h4 class="font-bold text-sm">Ottimo AI Assistant</h4>
+                    <p class="text-[10px] text-emerald-100">Xizmat kuchi: Gemini-2.5-Flash</p>
+                </div>
+            </div>
+            <button onclick="toggleAiWidget()" class="hover:bg-emerald-700 p-1 rounded transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 p-4 overflow-y-auto space-y-3 h-80 bg-gray-50 text-xs" id="ai-chat-messages">
+            <!-- Messages stream -->
+        </div>
+
+        <div class="p-3 border-t bg-white flex gap-2">
+            <input type="text" id="ai-chat-input" placeholder="Savol yoki buyruq yozing..." class="flex-1 p-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500" onkeydown="if(event.key === 'Enter') sendAiMessage()">
+            <button onclick="sendAiMessage()" class="bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-lg transition-all">
+                <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Application State Controller -->
+    <script>
+        // Core mock state
+        const state = {
+            activeMenu: 'Boshqaruv paneli',
+            isSidebarOpen: true,
+            employees: [
+                { id: 1, name: 'Muhammad Amin', username: 'muhamad_1', password: 'Pass123', position: 'Xodim', branch: 'Parus', department: 'Iş', schedule: 'Standart 7:30-16:30', shift: ['07:30', '16:30'] },
+                { id: 2, name: 'Ibrohim', username: 'ibrohim_2', password: 'Pass234', position: 'Xodim', branch: 'Parus', department: 'Iş', schedule: 'Standart 9:00-21:00', shift: ['09:00', '21:00'] },
+                { id: 3, name: 'Ibrohim Stajor', username: 'ibrohim_3', password: 'Pass345', position: 'Xodim', branch: 'Parus', department: 'Iş', schedule: 'Standart 16:00-00:00', shift: ['16:00', '00:00'] },
+                { id: 4, name: 'Zoxida', username: 'zoxida_4', password: 'Pass456', position: 'Xodim', branch: 'Parus', department: 'Iş', schedule: 'Standart 16:00-00:00', shift: ['16:00', '00:00'] },
+                { id: 5, name: 'Ilhom', username: 'ilhom_1', password: 'Pass123456', position: 'Xodim', branch: 'Parus', department: 'Iş', schedule: 'Standart 14:00-00:00', shift: ['14:00', '00:00'] },
+                { id: 6, name: 'Komila', username: 'komila_13', password: 'Pass345', position: 'Xodim', branch: 'Parus', department: 'Iş', schedule: 'Standart 7:30-16:30', shift: ['07:30', '16:30'] },
+                { id: 7, name: 'Xurshid', username: 'xurshid_6', password: 'Pass567', position: 'Xodim', branch: 'Nukus', department: 'Iş', schedule: 'Standart 15:00-00:00', shift: ['15:00', '00:00'] },
+                { id: 8, name: 'Dadaxon', username: 'dadaxon_7', password: 'Pass678', position: 'Xodim', branch: 'Nukus', department: 'Iş', schedule: 'Standart 17:00-00:00', shift: ['17:00', '00:00'] },
+                { id: 9, name: 'Mohichehra', username: 'mohichehra_8', password: 'Pass789', position: 'Xodim', branch: 'Nukus', department: 'Iş', schedule: 'Standart 7:30-16:30', shift: ['07:30', '16:30'] },
+                { id: 10, name: 'Aziza', username: 'aziza_9', password: 'Pass890', position: 'Xodim', branch: 'Nukus', department: 'Iş', schedule: 'Standart 7:30-16:30', shift: ['07:30', '16:30'] },
+                { id: 11, name: 'Abror bek', username: 'abror_10', password: 'Pass901', position: 'Xodim', branch: 'Nukus', department: 'Iş', schedule: 'Standart 10:00-19:00', shift: ['10:00', '19:00'] },
+                { id: 12, name: 'Maryam', username: 'maryam_11', password: 'Pass012', position: 'Xodim', branch: 'Nukus', department: 'Iş', schedule: 'Standart 7:30-23:00', shift: ['07:30', '23:00'] },
+                { id: 13, name: 'Mariyam', username: 'mariyam_12', password: 'Pass234', position: 'Xodim', branch: 'Nukus', department: 'Iş', schedule: 'Standart 18:00-00:00', shift: ['18:00', '00:00'] }
+            ],
+            branches: [
+                { id: 1, name: 'Parus', company: 'Ottimo LLC', address: 'Parus Filial', radius: '100m' },
+                { id: 2, name: 'Nukus', company: 'Ottimo LLC', address: 'Nukus Filal', radius: '150m' }
+            ],
+            departments: [
+                { id: 1, name: 'Texnik bo\'lim', branch: 'Ottimo ofis' },
+                { id: 2, name: 'Kadrlar bo\'limi', branch: 'Yunusobod Edu Center' }
+            ],
+            positions: [
+                { id: 1, name: 'IT mutaxassis', salary: '5,000,000 UZS' },
+                { id: 2, name: 'HR menejer', salary: '4,500,000 UZS' },
+                { id: 3, name: 'Dasturchi', salary: '8,000,000 UZS' }
+            ],
+            schedules: [
+                { id: 1, name: 'Standart Moslashuvchan', type: 'Moslashuvchan', startDate: '2026-05-04', cycle: 7, days: [
+                    { day: 1, isWork: true, start: '09:00', end: '18:00', lunchStart: '13:00', lunchEnd: '14:00' },
+                    { day: 2, isWork: true, start: '09:00', end: '18:00', lunchStart: '13:00', lunchEnd: '14:00' },
+                    { day: 3, isWork: true, start: '09:00', end: '18:00', lunchStart: '13:00', lunchEnd: '14:00' },
+                    { day: 4, isWork: true, start: '09:00', end: '18:00', lunchStart: '13:00', lunchEnd: '14:00' },
+                    { day: 5, isWork: true, start: '09:00', end: '18:00', lunchStart: '13:00', lunchEnd: '14:00' },
+                    { day: 6, isWork: false, start: '09:00', end: '18:00', lunchStart: '13:00', lunchEnd: '14:00' },
+                    { day: 7, isWork: false, start: '09:00', end: '18:00', lunchStart: '13:00', lunchEnd: '14:00' }
+                ]}
+            ],
+            attendance: [
+                { id: 1, employee: 'Anvar Ergashev', branch: 'Ottimo ofis', date: '2026-06-14', time: '08:55', type: 'Kelish', note: 'O\'z vaqtida keldi' },
+                { id: 2, employee: 'Malika Sobirova', branch: 'Yunusobod Edu Center', date: '2026-06-14', time: '09:02', type: 'Kelish', note: 'Tirbandlik sababli 2 daqiqa kechikdi' }
+            ],
+            fines: [
+                { id: 1, name: 'Kechikish jarimasi', status: 'Yoqilgan', company: 'Ottimo', types: ['Kech kelish'], updated: '07/05/2026' }
+            ],
+            holidays: [
+                { id: 1, name: 'Mustaqillik kuni', date: '2026-09-01', scope: 'Barcha filiallar', exceptions: 'Navbatchi texniklar' }
+            ],
+            searchQuery: "",
+            aiMessages: [
+                { role: 'ai', text: 'Salom! Men Ottimo HR AI yordamchisiman. Sizga xodimlar davomati, smenalar yoki ish unumdorligini tahlil qilishda qanday ko\'maklasha olaman?' }
+            ],
+            generatedWarning: "",
+            newScheduleDays: Array.from({ length: 7 }, (_, i) => ({
+                day: i + 1,
+                isWork: i < 5,
+                start: '09:00',
+                end: '18:00',
+                lunchStart: '13:00',
+                lunchEnd: '14:00'
+            }))
+        };
+
+        const menuItems = [
+            { name: 'Boshqaruv paneli', icon: 'layout-dashboard' },
+            { name: 'Xodimlar', icon: 'users' },
+            { name: 'Shoxobchalar', icon: 'building-2' },
+            { name: 'Bo\'limlar', icon: 'briefcase' },
+            { name: 'Lavozimlar', icon: 'award' },
+            { name: 'Jadvallar', icon: 'calendar-days' },
+            { name: 'Bayramlar', icon: 'party-popper' },
+            { name: 'Jarimalar', icon: 'alert-triangle' },
+        ];
+
+        function renderSidebar() {
+            const sidebarNav = document.getElementById('sidebar-nav');
+            sidebarNav.innerHTML = '';
+            menuItems.forEach(item => {
+                const isActive = state.activeMenu === item.name;
+                const activeClasses = isActive 
+                    ? 'bg-emerald-50 text-emerald-700 border-l-4 border-emerald-600 font-semibold' 
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900';
+                
+                const btn = document.createElement('button');
+                btn.className = `w-full flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-all ${activeClasses}`;
+                btn.onclick = () => {
+                    state.activeMenu = item.name;
+                    renderSidebar();
+                    renderMainContent();
+                };
+                
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="${item.icon}" class="w-5 h-5 ${isActive ? 'text-emerald-600' : 'text-gray-400'}"></i>
+                        <span>${item.name}</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 ${isActive ? 'text-emerald-500' : 'text-gray-300'}"></i>
+                `;
+                sidebarNav.appendChild(btn);
+            });
+            lucide.createIcons();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            state.isSidebarOpen = !state.isSidebarOpen;
+            if (state.isSidebarOpen) {
+                sidebar.classList.remove('-ml-64');
+            } else {
+                sidebar.classList.add('-ml-64');
+            }
+        }
+
+        function showNotification(text, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-semibold transition-all duration-300 transform translate-y-2 opacity-0 ${
+                type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-rose-50 border-rose-200 text-rose-800'
+            }`;
+            toast.innerHTML = `
+                <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-5 h-5"></i>
+                <span>${text}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function renderMainContent() {
+            const mainContent = document.getElementById('main-content');
+            
+            if (state.activeMenu === 'Boshqaruv paneli') {
+                renderDashboard(mainContent);
+            } else if (state.activeMenu === 'Xodimlar') {
+                renderEmployees(mainContent);
+            } else if (state.activeMenu === 'Shoxobchalar') {
+                renderBranches(mainContent);
+            } else if (state.activeMenu === 'Bo\'limlar') {
+                renderDepartments(mainContent);
+            } else if (state.activeMenu === 'Lavozimlar') {
+                renderPositions(mainContent);
+            } else if (state.activeMenu === 'Jadvallar') {
+                renderSchedules(mainContent);
+            } else if (state.activeMenu === 'Bayramlar') {
+                renderHolidays(mainContent);
+            } else if (state.activeMenu === 'Jarimalar') {
+                renderFines(mainContent);
+            }
+            lucide.createIcons();
+        }
+
+        function renderDashboard(target) {
+            const dateStr = new Date().toLocaleDateString('uz-UZ', { month: 'short', day: '2-digit', year: 'numeric' });
+            
+            // Filter queries
+            const filteredAttendance = state.attendance.filter(att => {
+                if (!state.searchQuery) return true;
+                return att.employee.toLowerCase().includes(state.searchQuery.toLowerCase());
+            });
+
+            target.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                        <div class="flex items-center gap-4">
+                            <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">Boshqaruv paneli</h2>
+                            <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1 text-sm text-gray-600 shadow-sm">
+                                <i data-lucide="calendar" class="w-4 h-4 text-gray-400"></i>
+                                <span>${dateStr}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="flex items-center gap-2 border px-4 py-2 bg-white rounded-lg hover:bg-gray-50 text-sm font-medium shadow-sm">
+                                <i data-lucide="filter" class="w-4 h-4"></i> Filtr
+                            </button>
+                            <button onclick="openModal('attendance')" class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 text-sm font-medium shadow-sm transition-all">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Qo'lda davomat yaratish
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Status Cards (Exactly matching style metrics) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-5 rounded-2xl border bg-emerald-50/50 border-emerald-200 text-emerald-800 shadow-sm flex flex-col justify-between h-32 relative overflow-hidden">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs font-bold uppercase tracking-wider opacity-80">Barchasi</span>
+                                <div class="p-2 bg-white/60 rounded-lg"><i data-lucide="users" class="w-5 h-5 text-emerald-600"></i></div>
+                            </div>
+                            <span class="text-4xl font-extrabold mt-2 tracking-tight">${state.employees.length}</span>
+                        </div>
+                        <div class="p-5 rounded-2xl border bg-blue-50/50 border-blue-200 text-blue-800 shadow-sm flex flex-col justify-between h-32 relative overflow-hidden">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs font-bold uppercase tracking-wider opacity-80">Ishda</span>
+                                <div class="p-2 bg-white/60 rounded-lg"><i data-lucide="check-circle" class="w-5 h-5 text-blue-600"></i></div>
+                            </div>
+                            <span class="text-4xl font-extrabold mt-2 tracking-tight">${state.attendance.filter(a => a.type === 'Kelish').length}</span>
+                        </div>
+                        <div class="p-5 rounded-2xl border bg-amber-50/50 border-amber-200 text-amber-800 shadow-sm flex flex-col justify-between h-32 relative overflow-hidden">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs font-bold uppercase tracking-wider opacity-80">Kech</span>
+                                <div class="p-2 bg-white/60 rounded-lg"><i data-lucide="clock" class="w-5 h-5 text-amber-600"></i></div>
+                            </div>
+                            <span class="text-4xl font-extrabold mt-2 tracking-tight">${state.attendance.filter(a => a.note && a.note.toLowerCase().includes('kechikdi')).length}</span>
+                        </div>
+                        <div class="p-5 rounded-2xl border bg-rose-50/50 border-rose-200 text-rose-800 shadow-sm flex flex-col justify-between h-32 relative overflow-hidden">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs font-bold uppercase tracking-wider opacity-80">Ishda emas</span>
+                                <div class="p-2 bg-white/60 rounded-lg"><i data-lucide="x" class="w-5 h-5 text-rose-600"></i></div>
+                            </div>
+                            <span class="text-4xl font-extrabold mt-2 tracking-tight">${Math.max(0, state.employees.length - state.attendance.filter(a => a.type === 'Kelish').length)}</span>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Table -->
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div class="p-5 border-b flex justify-between items-center bg-gray-50/50">
+                            <h3 class="font-bold text-gray-900">Xodimlar davomati</h3>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Bugungi holat</span>
+                        </div>
+                        ${filteredAttendance.length === 0 ? `
+                            <div class="text-center py-12">
+                                <p class="text-gray-400 text-sm">Xodimlar holati haqida ma'lumot yo'q</p>
+                            </div>
+                        ` : `
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="bg-gray-50 border-b text-gray-500 font-semibold">
+                                        <tr>
+                                            <th class="p-4">Xodim</th>
+                                            <th class="p-4">Kirish</th>
+                                            <th class="p-4">Chiqish</th>
+                                            <th class="p-4">Qo'shimcha</th>
+                                            <th class="p-4">Jami</th>
+                                            <th class="p-4">Filiallar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y text-gray-700">
+                                        ${filteredAttendance.map(att => `
+                                            <tr class="hover:bg-gray-50 transition-colors">
+                                                <td class="p-4 font-bold text-gray-900">${att.employee}</td>
+                                                <td class="p-4 font-mono text-emerald-600">${att.type === 'Kelish' ? att.time : '-'}</td>
+                                                <td class="p-4 font-mono text-rose-500">${att.type === 'Ketish' ? att.time : '-'}</td>
+                                                <td class="p-4 text-gray-500">-</td>
+                                                <td class="p-4 font-semibold text-gray-800">-</td>
+                                                <td class="p-4">
+                                                    <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 px-2.5 py-1 rounded-full text-xs font-bold">
+                                                        ${att.branch}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `}
+                    </div>
+
+                    <!-- Extra Requests Area -->
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-900">Qo'shimcha ish arizalari</h3>
+                            <span class="text-xs text-gray-400">Javob berilmagan arizalar topilmadi</span>
+                        </div>
+                        <div class="border border-dashed border-gray-200 rounded-xl p-12 text-center text-gray-400 text-sm">
+                            Yangi arizalar mavjud emas.
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderEmployees(target) {
+            const filtered = state.employees.filter(emp => {
+                if (!state.searchQuery) return true;
+                return emp.name.toLowerCase().includes(state.searchQuery.toLowerCase());
+            });
+
+            target.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Xodimlar</h2>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="bg-white text-gray-700 border border-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 shadow-sm flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-4 h-4"></i> Excelni yuklab olish
+                            </button>
+                            <button onclick="openModal('employee')" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 flex items-center gap-2 shadow-sm transition-all">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Xodim qo'shish
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div class="p-4 border-b flex flex-wrap gap-3 items-center justify-between bg-gray-50/50">
+                            <span class="font-bold text-gray-800">Xodimlar ro'yxati</span>
+                            <div class="flex gap-2 flex-wrap flex-1 max-w-2xl justify-end">
+                                <div class="relative max-w-xs flex-1">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i data-lucide="search" class="w-4 h-4"></i></span>
+                                    <input type="text" id="employee-search-bar" oninput="handleLocalSearch(this.value)" placeholder="Xodimlarni qidirish..." class="w-full pl-9 pr-4 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white">
+                                </div>
+                                <select class="border border-gray-200 rounded-lg p-1.5 text-xs text-gray-600 bg-white"><option>Barcha filiallar</option></select>
+                                <select class="border border-gray-200 rounded-lg p-1.5 text-xs text-gray-600 bg-white"><option>Barcha lavozimlar</option></select>
+                                <select class="border border-gray-200 rounded-lg p-1.5 text-xs text-gray-600 bg-white"><option>Barcha bo'limlar</option></select>
+                            </div>
+                        </div>
+
+                        ${filtered.length === 0 ? `
+                            <div class="text-center py-12">
+                                <p class="text-gray-400 text-sm">Xodimlar topilmadi</p>
+                            </div>
+                        ` : `
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="bg-gray-50 text-gray-500 font-semibold border-b">
+                                        <tr>
+                                            <th class="p-4">Xodim</th>
+                                            <th class="p-4">Username</th>
+                                            <th class="p-4">Parol</th>
+                                            <th class="p-4">Lavozim</th>
+                                            <th class="p-4">Filial</th>
+                                            <th class="p-4">Jadval</th>
+                                            <th class="p-4 text-right">Amallar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        ${filtered.map(emp => `
+                                            <tr class="hover:bg-gray-50 transition-colors">
+                                                <td class="p-4 font-bold text-gray-900">${emp.name}</td>
+                                                <td class="p-4 text-gray-600 font-mono text-xs">${emp.username || '-'}</td>
+                                                <td class="p-4 text-gray-600 font-mono text-xs">${emp.password || '-'}</td>
+                                                <td class="p-4 text-gray-600">${emp.position}</td>
+                                                <td class="p-4 text-gray-600">
+                                                    <span class="bg-emerald-50 text-emerald-800 px-2.5 py-0.5 rounded-full text-xs font-bold border border-emerald-100">
+                                                        ${emp.branch}
+                                                    </span>
+                                                </td>
+                                                <td class="p-4 text-gray-500">${emp.schedule}</td>
+                                                <td class="p-4 text-right">
+                                                    <button onclick="deleteEmployee(${emp.id})" class="text-rose-500 p-1.5 hover:bg-rose-50 rounded-lg transition-colors">
+                                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBranches(target) {
+            target.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Shoxobchalar</h2>
+                        </div>
+                        <button onclick="openModal('branch')" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 flex items-center gap-2 shadow-sm transition-all">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Yangi shoxobcha
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 overflow-hidden">
+                        <h3 class="font-bold text-gray-800 mb-4">Shoxobchalar ro'yxati</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-gray-50 text-gray-500 font-semibold border-b">
+                                    <tr>
+                                        <th class="p-4">Nomi</th>
+                                        <th class="p-4">Kompaniya</th>
+                                        <th class="p-4">Manzil</th>
+                                        <th class="p-4">Radius (m)</th>
+                                        <th class="p-4 text-right">Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y">
+                                    ${state.branches.map(b => `
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="p-4 font-bold text-gray-900">${b.name}</td>
+                                            <td class="p-4 text-gray-600">${b.company}</td>
+                                            <td class="p-4 text-gray-600">
+                                                <div class="flex items-center gap-2">
+                                                    <i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i>
+                                                    <span>${b.address}</span>
+                                                </div>
+                                            </td>
+                                            <td class="p-4 font-mono text-gray-700">${b.radius}</td>
+                                            <td class="p-4 text-right">
+                                                <div class="flex justify-end gap-2">
+                                                    <button class="text-gray-400 p-1 hover:bg-gray-100 rounded">
+                                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                    <button onclick="deleteBranch(${b.id})" class="text-rose-500 p-1 hover:bg-rose-50 rounded">
+                                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDepartments(target) {
+            target.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Bo'limlar</h2>
+                        </div>
+                        <button onclick="openModal('department')" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 flex items-center gap-2 shadow-sm transition-all">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Yangi bo'lim
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden p-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-gray-50 text-gray-500 font-semibold border-b">
+                                    <tr>
+                                        <th class="p-4">Bo'lim nomi</th>
+                                        <th class="p-4 text-right">Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y">
+                                    ${state.departments.length === 0 ? `
+                                        <tr>
+                                            <td class="p-8 text-center text-gray-400">Bo'limlar topilmadi</td>
+                                        </tr>
+                                    ` : state.departments.map(d => `
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="p-4 font-bold text-gray-900">${d.name}</td>
+                                            <td class="p-4 text-right">
+                                                <button onclick="deleteDept(${d.id})" class="text-rose-500 p-1.5 hover:bg-rose-50 rounded-lg transition-colors">
+                                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPositions(target) {
+            target.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Lavozimlar</h2>
+                        </div>
+                        <button onclick="openModal('position')" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 flex items-center gap-2 shadow-sm transition-all">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Lavozim qo'shish
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden p-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-gray-50 text-gray-500 font-semibold border-b">
+                                    <tr>
+                                        <th class="p-4">Nomi</th>
+                                        <th class="p-4 text-right">Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y">
+                                    ${state.positions.map(p => `
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="p-4 font-bold text-gray-900">${p.name}</td>
+                                            <td class="p-4 text-right">
+                                                <div class="flex justify-end gap-2">
+                                                    <button class="text-gray-400 p-1.5 hover:bg-gray-100 rounded-lg">
+                                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                    <button onclick="deletePosition(${p.id})" class="text-rose-500 p-1.5 hover:bg-rose-50 rounded-lg transition-colors">
+                                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSchedules(target) {
+            target.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Ish jadvallari</h2>
+                        </div>
+                        <button onclick="openModal('schedule')" class="bg-emerald-600 text-white px-5 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold hover:bg-emerald-700 transition-all shadow-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Yangi jadval
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden p-6">
+                        <h3 class="font-bold text-gray-800 mb-4">Ish jadvallari</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-gray-50 text-gray-500 font-semibold border-b">
+                                    <tr>
+                                        <th class="p-4">Nomi</th>
+                                        <th class="p-4">Turi</th>
+                                        <th class="p-4">Boshlanish sanasi</th>
+                                        <th class="p-4">Sikl</th>
+                                        <th class="p-4 text-right">Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y">
+                                    ${state.schedules.map(sch => `
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="p-4 font-bold text-gray-900">${sch.name}</td>
+                                            <td class="p-4">
+                                                <span class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold">
+                                                    ${sch.type}
+                                                </span>
+                                            </td>
+                                            <td class="p-4 text-gray-600 font-mono">${sch.startDate}</td>
+                                            <td class="p-4 text-gray-600">${sch.cycle} kunlik</td>
+                                            <td class="p-4 text-right">
+                                                <div class="flex justify-end gap-2">
+                                                    <button class="text-gray-400 p-1.5 hover:bg-gray-100 rounded-lg">
+                                                        <i data-lucide="eye" class="w-4 h-4"></i>
+                                                    </button>
+                                                    <button class="text-gray-400 p-1.5 hover:bg-gray-100 rounded-lg">
+                                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                    <button onclick="deleteSchedule(${sch.id})" class="text-rose-500 p-1.5 hover:bg-rose-50 rounded-lg transition-colors">
+                                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHolidays(target) {
+            target.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Bayramlar</h2>
+                        </div>
+                        <button onclick="openModal('holiday')" class="bg-emerald-600 text-white px-5 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold hover:bg-emerald-700 transition-all">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Bayram qo'shish
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden p-6">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-50 text-gray-500 font-semibold border-b">
+                                <tr>
+                                    <th class="p-4">Bayram nomi</th>
+                                    <th class="p-4">Sana</th>
+                                    <th class="p-4">Qamrov</th>
+                                    <th class="p-4">Istisnolar</th>
+                                    <th class="p-4 text-right">Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                ${state.holidays.map(h => `
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 font-bold text-gray-900">${h.name}</td>
+                                        <td class="p-4 text-gray-600 font-mono">${h.date}</td>
+                                        <td class="p-4 text-gray-600">${h.scope}</td>
+                                        <td class="p-4 text-gray-500">${h.exceptions || 'Mavjud emas'}</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="deleteHoliday(${h.id})" class="text-rose-500 p-1.5 hover:bg-rose-50 rounded-lg transition-colors">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFines(target) {
+            target.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Jarimalar</h2>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateAiWarning()" class="flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-300 px-4 py-2 rounded-lg hover:bg-emerald-100 text-sm font-semibold transition-all">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-emerald-600"></i>
+                                ✨ AI Ogohlantirish xati yaratish
+                            </button>
+                            <button onclick="openModal('fine')" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 flex items-center gap-2 transition-all shadow-sm">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Jarima yaratish
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Warning Letter block -->
+                    <div id="ai-warning-block" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-6 relative shadow-sm transition-all animate-fade-in">
+                        <button onclick="closeWarningBlock()" class="absolute top-4 right-4 text-emerald-800 hover:text-emerald-950">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                        <h3 class="font-bold text-emerald-950 flex items-center gap-2 mb-2">
+                            <i data-lucide="file-text" class="w-5 h-5 text-emerald-600"></i>
+                            <span>✨ AI Ogohlantirish xati</span>
+                        </h3>
+                        <div id="ai-warning-text" class="text-sm text-emerald-900 whitespace-pre-line bg-white/80 p-4 rounded-lg border border-emerald-100 font-sans leading-relaxed">
+                            Generating professional content...
+                        </div>
+                        <div class="mt-3 flex justify-end gap-2">
+                            <button onclick="copyWarningText()" class="text-xs bg-emerald-600 text-white font-semibold py-1.5 px-3 rounded hover:bg-emerald-700 transition-all shadow-sm">
+                                Nusxa olish
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden p-6">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-50 text-gray-500 font-semibold border-b">
+                                <tr>
+                                    <th class="p-4">Jarima nomi</th>
+                                    <th class="p-4">Holat</th>
+                                    <th class="p-4">Kompaniya</th>
+                                    <th class="p-4">Jarima turlari</th>
+                                    <th class="p-4">Yangilangan</th>
+                                    <th class="p-4 text-right">Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                ${state.fines.map(f => `
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 font-bold text-gray-900">${f.name}</td>
+                                        <td class="p-4">
+                                            <span class="bg-amber-100 text-amber-800 px-3 py-0.5 rounded text-xs font-bold">
+                                                ${f.status}
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-gray-600">${f.company}</td>
+                                        <td class="p-4 flex flex-wrap gap-1.5 items-center">
+                                            ${f.types.map(t => `
+                                                <span class="bg-rose-50 text-rose-700 border border-rose-100 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                                    ${t}
+                                                </span>
+                                            `).join('')}
+                                        </td>
+                                        <td class="p-4 text-gray-500 font-mono">${f.updated}</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="deleteFine(${f.id})" class="text-rose-500 p-1.5 hover:bg-rose-50 rounded-lg transition-colors">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openModal(type) {
+            const modal = document.getElementById(`modal-${type}`);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            // Populate selection lists
+            if (type === 'attendance') {
+                const empSelect = document.getElementById('att-employee');
+                const branchSelect = document.getElementById('att-branch');
+                
+                empSelect.innerHTML = '<option value="">Xodimni tanlang</option>' + state.employees.map(e => `<option value="${e.name}">${e.name}</option>`).join('');
+                branchSelect.innerHTML = '<option value="">Shoxobchani tanlang</option>' + state.branches.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+                
+                // Defaults
+                document.getElementById('att-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('att-time').value = new Date().toTimeString().slice(0, 5);
+                document.getElementById('att-note').value = '';
+            } else if (type === 'employee') {
+                document.getElementById('emp-position').innerHTML = state.positions.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+                document.getElementById('emp-branch').innerHTML = state.branches.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+                document.getElementById('emp-dept').innerHTML = state.departments.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+                document.getElementById('emp-schedule').innerHTML = state.schedules.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+                document.getElementById('emp-name').value = '';
+            } else if (type === 'department') {
+                document.getElementById('dept-branch').innerHTML = state.branches.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+                document.getElementById('dept-name').value = '';
+            } else if (type === 'holiday') {
+                document.getElementById('hol-scope').innerHTML = '<option value="Barcha filiallar">Barcha filiallar</option>' + state.branches.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+                document.getElementById('hol-name').value = '';
+                document.getElementById('hol-date').value = '';
+                document.getElementById('hol-exceptions').value = '';
+            } else if (type === 'schedule') {
+                document.getElementById('sch-name').value = '';
+                document.getElementById('sch-start-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('sch-cycle').value = '7';
+                document.getElementById('sch-has-overtime').checked = false;
+                document.getElementById('overtime-hours-div').classList.add('hidden');
+                renderScheduleDays();
+            } else if (type === 'branch') {
+                document.getElementById('branch-name').value = '';
+                document.getElementById('branch-address').value = '';
+                document.getElementById('branch-radius').value = '100m';
+            } else if (type === 'position') {
+                document.getElementById('pos-name').value = '';
+                document.getElementById('pos-salary').value = '4,500,000 UZS';
+            } else if (type === 'fine') {
+                document.getElementById('fine-name').value = '';
+                const checks = document.getElementsByName('fine-type-check');
+                checks.forEach(c => c.checked = false);
+            }
+            lucide.createIcons();
+        }
+
+        function closeModal(type) {
+            const modal = document.getElementById(`modal-${type}`);
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function renderScheduleDays() {
+            const target = document.getElementById('schedules-days-list');
+            target.innerHTML = '';
+            const cycle = parseInt(document.getElementById('sch-cycle').value) || 7;
+            
+            // Re-initialize state days array based on cycle size
+            state.newScheduleDays = Array.from({ length: cycle }, (_, i) => ({
+                day: i + 1,
+                isWork: i < 5,
+                start: '09:00',
+                end: '18:00',
+                lunchStart: '13:00',
+                lunchEnd: '14:00'
+            }));
+
+            state.newScheduleDays.forEach((d, i) => {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'p-4 border border-gray-100 rounded-xl bg-gray-50/50 text-xs space-y-3';
+                dayDiv.innerHTML = `
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <span class="font-bold text-gray-700">Kun ${d.day}</span>
+                        <label class="flex items-center gap-1 font-semibold cursor-pointer">
+                            <input type="checkbox" ${d.isWork ? 'checked' : ''} onchange="toggleDayWork(${i}, this.checked)" class="w-4 h-4 rounded text-emerald-600">
+                            <span>Ish kuni</span>
+                        </label>
+                    </div>
+                    <div id="day-times-${i}" class="${d.isWork ? 'grid' : 'hidden'} grid-cols-2 md:grid-cols-4 gap-3">
+                        <div>
+                            <span class="text-[10px] text-gray-400 block mb-1">Boshlanish vaqti</span>
+                            <input type="text" value="${d.start}" oninput="state.newScheduleDays[${i}].start = this.value" class="w-full p-2 border border-gray-200 rounded font-mono">
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-gray-400 block mb-1">Tugash vaqti</span>
+                            <input type="text" value="${d.end}" oninput="state.newScheduleDays[${i}].end = this.value" class="w-full p-2 border border-gray-200 rounded font-mono">
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-gray-400 block mb-1">Tanaffus boshlanishi</span>
+                            <input type="text" value="${d.lunchStart}" oninput="state.newScheduleDays[${i}].lunchStart = this.value" class="w-full p-2 border border-gray-200 rounded font-mono">
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-gray-400 block mb-1">Tanaffus tugashi</span>
+                            <input type="text" value="${d.lunchEnd}" oninput="state.newScheduleDays[${i}].lunchEnd = this.value" class="w-full p-2 border border-gray-200 rounded font-mono">
+                        </div>
+                    </div>
+                `;
+                target.appendChild(dayDiv);
+            });
+        }
+
+        function toggleDayWork(index, isChecked) {
+            state.newScheduleDays[index].isWork = isChecked;
+            const targetDiv = document.getElementById(`day-times-${index}`);
+            if (isChecked) {
+                targetDiv.classList.remove('hidden');
+                targetDiv.classList.add('grid');
+            } else {
+                targetDiv.classList.add('hidden');
+                targetDiv.classList.remove('grid');
+            }
+        }
+
+        function adjustCycle(amount) {
+            const input = document.getElementById('sch-cycle');
+            let current = parseInt(input.value) || 7;
+            current = Math.max(1, current + amount);
+            input.value = current;
+            renderScheduleDays();
+        }
+
+        function toggleOvertimeDiv(isChecked) {
+            const oDiv = document.getElementById('overtime-hours-div');
+            if (isChecked) {
+                oDiv.classList.remove('hidden');
+            } else {
+                oDiv.classList.add('hidden');
+            }
+        }
+
+        function submitAttendance(type) {
+            const employee = document.getElementById('att-employee').value;
+            const branch = document.getElementById('att-branch').value;
+            const date = document.getElementById('att-date').value;
+            const time = document.getElementById('att-time').value;
+            const note = document.getElementById('att-note').value;
+
+            if (!employee || !branch) {
+                showNotification("Iltimos, xodim va filialni tanlang!", "error");
+                return;
+            }
+
+            state.attendance.unshift({
+                id: Date.now(),
+                employee,
+                branch,
+                date,
+                time,
+                type,
+                note: note || (type === 'Kelish' ? "O'z vaqtida keldi" : "Ketish qayd etildi")
+            });
+
+            closeModal('attendance');
+            showNotification(`Davomat (${type}) muvaffaqiyatli saqlandi!`);
+            renderMainContent();
+        }
+
+        function submitEmployee() {
+            const name = document.getElementById('emp-name').value;
+            const username = document.getElementById('emp-username').value;
+            const password = document.getElementById('emp-password').value;
+            const position = document.getElementById('emp-position').value;
+            const branch = document.getElementById('emp-branch').value;
+            const department = document.getElementById('emp-dept').value;
+            const schedule = document.getElementById('emp-schedule').value;
+
+            if (!name || !username || !password) {
+                showNotification("Ism, username va parol kiritish majburiy!", "error");
+                return;
+            }
+
+            state.employees.push({
+                id: Date.now(),
+                name,
+                username,
+                password,
+                position,
+                branch,
+                department,
+                schedule
+            });
+
+            // Clear form
+            document.getElementById('emp-name').value = '';
+            document.getElementById('emp-username').value = '';
+            document.getElementById('emp-password').value = '';
+
+            closeModal('employee');
+            showNotification("Yangi xodim muvaffaqiyatli qo'shildi! Username: " + username);
+            renderMainContent();
+        }
+
+        function submitBranch() {
+            const name = document.getElementById('branch-name').value;
+            const company = document.getElementById('branch-company').value;
+            const address = document.getElementById('branch-address').value;
+            const radius = document.getElementById('branch-radius').value;
+
+            if (!name) {
+                showNotification("Nomi kiritilishi shart!", "error");
+                return;
+            }
+
+            state.branches.push({
+                id: Date.now(),
+                name,
+                company,
+                address: address || "Toshkent",
+                radius
+            });
+
+            closeModal('branch');
+            showNotification("Shoxobcha muvaffaqiyatli saqlandi!");
+            renderMainContent();
+        }
+
+        function submitDepartment() {
+            const name = document.getElementById('dept-name').value;
+            const branch = document.getElementById('dept-branch').value;
+
+            if (!name || !branch) {
+                showNotification("Bo'lim nomi va filial tanlanishi lozim!", "error");
+                return;
+            }
+
+            state.departments.push({
+                id: Date.now(),
+                name,
+                branch
+            });
+
+            closeModal('department');
+            showNotification("Bo'lim muvaffaqiyatli qo'shildi!");
+            renderMainContent();
+        }
+
+        function submitPosition() {
+            const name = document.getElementById('pos-name').value;
+            const salary = document.getElementById('pos-salary').value;
+
+            if (!name) {
+                showNotification("Lavozim nomi talab etiladi!", "error");
+                return;
+            }
+
+            state.positions.push({
+                id: Date.now(),
+                name,
+                salary
+            });
+
+            closeModal('position');
+            showNotification("Lavozim ro'yxatga qo'shildi!");
+            renderMainContent();
+        }
+
+        function submitSchedule() {
+            const name = document.getElementById('sch-name').value || "Moslashuvchan jadval";
+            const startDate = document.getElementById('sch-start-date').value;
+            const cycle = parseInt(document.getElementById('sch-cycle').value) || 7;
+
+            state.schedules.push({
+                id: Date.now(),
+                name,
+                type: 'Moslashuvchan',
+                startDate,
+                cycle,
+                days: [...state.newScheduleDays]
+            });
+
+            closeModal('schedule');
+            showNotification("Yangi ish jadvali yaratildi!");
+            renderMainContent();
+        }
+
+        function submitHoliday() {
+            const name = document.getElementById('hol-name').value;
+            const date = document.getElementById('hol-date').value;
+            const scope = document.getElementById('hol-scope').value;
+            const exceptions = document.getElementById('hol-exceptions').value;
+
+            if (!name || !date) {
+                showNotification("Ism va sana talab etiladi!", "error");
+                return;
+            }
+
+            state.holidays.push({
+                id: Date.now(),
+                name,
+                date,
+                scope,
+                exceptions
+            });
+
+            closeModal('holiday');
+            showNotification("Bayram muvaffaqiyatli saqlandi!");
+            renderMainContent();
+        }
+
+        function submitFine() {
+            const name = document.getElementById('fine-name').value;
+            const checkedTypes = [];
+            const checks = document.getElementsByName('fine-type-check');
+            checks.forEach(c => {
+                if (c.checked) checkedTypes.push(c.value);
+            });
+
+            if (!name) {
+                showNotification("Jarima nomi kiritilishi shart!", "error");
+                return;
+            }
+
+            state.fines.push({
+                id: Date.now(),
+                name,
+                status: 'Yoqilgan',
+                company: 'Ottimo',
+                types: checkedTypes,
+                updated: new Date().toLocaleDateString('uz-UZ')
+            });
+
+            closeModal('fine');
+            showNotification("Jarima qoidasi yaratildi!");
+            renderMainContent();
+        }
+
+        function deleteEmployee(id) {
+            state.employees = state.employees.filter(e => e.id !== id);
+            showNotification("Xodim o'chirildi!");
+            renderMainContent();
+        }
+        function deleteBranch(id) {
+            state.branches = state.branches.filter(b => b.id !== id);
+            showNotification("Shoxobcha o'chirildi!");
+            renderMainContent();
+        }
+        function deleteDept(id) {
+            state.departments = state.departments.filter(d => d.id !== id);
+            showNotification("Bo'lim o'chirildi!");
+            renderMainContent();
+        }
+        function deletePosition(id) {
+            state.positions = state.positions.filter(p => p.id !== id);
+            showNotification("Lavozim o'chirildi!");
+            renderMainContent();
+        }
+        function deleteSchedule(id) {
+            state.schedules = state.schedules.filter(s => s.id !== id);
+            showNotification("Jadval o'chirildi!");
+            renderMainContent();
+        }
+        function deleteHoliday(id) {
+            state.holidays = state.holidays.filter(h => h.id !== id);
+            showNotification("Bayram o'chirildi!");
+            renderMainContent();
+        }
+        function deleteFine(id) {
+            state.fines = state.fines.filter(f => f.id !== id);
+            showNotification("Jarima qoidasi o'chirildi!");
+            renderMainContent();
+        }
+
+        const callGeminiAPI = async (promptText) => {
+            const apiKey = ""; // Will be replaced automatically during preview compile
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            let delay = 1000;
+            for (let i = 0; i < 4; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: promptText }] }]
+                        })
+                    });
+                    if (!response.ok) throw new Error('API Rate limits/Error');
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "Javob olinmadi.";
+                } catch (err) {
+                    if (i === 3) return null;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        };
+
+        function toggleAiWidget() {
+            const chat = document.getElementById('ai-chat-panel');
+            chat.classList.toggle('hidden');
+            chat.classList.toggle('flex');
+            renderAiMessages();
+        }
+
+        function renderAiMessages() {
+            const box = document.getElementById('ai-chat-messages');
+            box.innerHTML = '';
+            state.aiMessages.forEach(msg => {
+                const bubble = document.createElement('div');
+                bubble.className = `flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`;
+                bubble.innerHTML = `
+                    <div class="p-3 rounded-xl max-w-[80%] ${msg.role === 'user' ? 'bg-emerald-600 text-white rounded-br-none' : 'bg-white border rounded-bl-none text-gray-800 shadow-sm'}">
+                        ${msg.text}
+                    </div>
+                `;
+                box.appendChild(bubble);
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        async function sendAiMessage() {
+            const input = document.getElementById('ai-chat-input');
+            const val = input.value.trim();
+            if (!val) return;
+
+            state.aiMessages.push({ role: 'user', text: val });
+            input.value = '';
+            renderAiMessages();
+
+            // Simulate loading bubble
+            const loadingBubble = document.createElement('div');
+            loadingBubble.className = 'flex justify-start';
+            loadingBubble.id = 'ai-loading-bubble';
+            loadingBubble.innerHTML = `
+                <div class="bg-white border p-3 rounded-xl rounded-bl-none flex items-center gap-2 text-gray-500">
+                    <span class="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce delay-100"></span>
+                    <span class="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce delay-200"></span>
+                    <span class="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce delay-300"></span>
+                </div>
+            `;
+            document.getElementById('ai-chat-messages').appendChild(loadingBubble);
+
+            const prompt = `
+                Sen Ottimo HR tizimining sun'iy intellekt yordamchisisan.
+                Hozirgi tizim holati:
+                Xodimlar soni: ${state.employees.length} nafar. (${state.employees.map(e => e.name).join(', ')})
+                Filiallar: ${state.branches.map(b => b.name).join(', ')}
+                Bo'limlar: ${state.departments.map(d => d.name).join(', ')}
+                Faol davomat yozuvlari: ${state.attendance.length} ta.
+                Yaqinda kechikkanlar: Malika Sobirova.
+                Foydalanuvchi so'rovi: "${val}"
+                Javobni juda muloyim, qisqa, tushunarli va professional o'zbek tilida ber.
+            `;
+
+            const res = await callGeminiAPI(prompt);
+            const lBubble = document.getElementById('ai-loading-bubble');
+            if (lBubble) lBubble.remove();
+
+            if (res) {
+                state.aiMessages.push({ role: 'ai', text: res });
+            } else {
+                state.aiMessages.push({ role: 'ai', text: "Aloqa o'rnatib bo'lmadi. Iltimos keyinroq qayta urinib ko'ring." });
+            }
+            renderAiMessages();
+        }
+
+        async function triggerAiScheduleGeneration() {
+            const promptVal = document.getElementById('ai-schedule-prompt').value.trim();
+            if (!promptVal) return;
+
+            const prompt = `
+                Menga HR tizimi uchun faqat "Moslashuvchan" turdagi 7 kunlik ish kunlarining boshlanish, tugash va tushlik vaqtlarini yaratib ber.
+                Foydalanuvchi talabi: "${promptVal}"
+                Javobni faqat va vaqtida quyidagi JSON formatida qaytar, qo'shimcha tushuntirish yozma:
+                {
+                    "name": "Jadval nomi",
+                    "days": [
+                        {"day": 1, "isWork": true, "start": "08:30", "end": "17:30", "lunchStart": "12:00", "lunchEnd": "13:00"},
+                        ... 7 kungacha
+                    ]
+                }
+            `;
+
+            showNotification("AI Jadval ustida o'ylamoqda...");
+            const res = await callGeminiAPI(prompt);
+            if (res) {
+                try {
+                    const cleaned = res.replace(/```json/g, "").replace(/```/g, "").trim();
+                    const parsed = JSON.parse(cleaned);
+                    document.getElementById('sch-name').value = parsed.name || "AI Jadval";
+                    
+                    state.newScheduleDays = parsed.days.map((d, i) => ({
+                        day: i + 1,
+                        isWork: d.isWork,
+                        start: d.start || '09:00',
+                        end: d.end || '18:00',
+                        lunchStart: d.lunchStart || '13:00',
+                        lunchEnd: d.lunchEnd || '14:00'
+                    }));
+
+                    // Re-render
+                    const target = document.getElementById('schedules-days-list');
+                    target.innerHTML = '';
+                    state.newScheduleDays.forEach((d, i) => {
+                        const dayDiv = document.createElement('div');
+                        dayDiv.className = 'p-4 border border-gray-100 rounded-xl bg-gray-50/50 text-xs space-y-3';
+                        dayDiv.innerHTML = `
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-bold text-gray-700">Kun ${d.day}</span>
+                                <label class="flex items-center gap-1 font-semibold cursor-pointer">
+                                    <input type="checkbox" ${d.isWork ? 'checked' : ''} onchange="toggleDayWork(${i}, this.checked)" class="w-4 h-4 rounded text-emerald-600">
+                                    <span>Ish kuni</span>
+                                </label>
+                            </div>
+                            <div id="day-times-${i}" class="${d.isWork ? 'grid' : 'hidden'} grid-cols-2 md:grid-cols-4 gap-3">
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block mb-1">Boshlanish vaqti</span>
+                                    <input type="text" value="${d.start}" oninput="state.newScheduleDays[${i}].start = this.value" class="w-full p-2 border border-gray-200 rounded font-mono">
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block mb-1">Tugash vaqti</span>
+                                    <input type="text" value="${d.end}" oninput="state.newScheduleDays[${i}].end = this.value" class="w-full p-2 border border-gray-200 rounded font-mono">
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block mb-1">Tanaffus boshlanishi</span>
+                                    <input type="text" value="${d.lunchStart}" oninput="state.newScheduleDays[${i}].lunchStart = this.value" class="w-full p-2 border border-gray-200 rounded font-mono">
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block mb-1">Tanaffus tugashi</span>
+                                    <input type="text" value="${d.lunchEnd}" oninput="state.newScheduleDays[${i}].lunchEnd = this.value" class="w-full p-2 border border-gray-200 rounded font-mono">
+                                </div>
+                            </div>
+                        `;
+                        target.appendChild(dayDiv);
+                    });
+
+                    showNotification("AI jadvali tayyorlandi!");
+                } catch (e) {
+                    showNotification("Xato yuz berdi, iltimos qayta urinib ko'ring.", "error");
+                }
+            } else {
+                showNotification("AI bilan aloqa o'rnatib bo'lmadi.", "error");
+            }
+        }
+
+        async function generateAiWarning() {
+            const textBlock = document.getElementById('ai-warning-block');
+            const textContent = document.getElementById('ai-warning-text');
+            
+            textBlock.classList.remove('hidden');
+            textContent.innerText = "Ottimo AI warning letter is processing... Please wait.";
+            
+            const prompt = `
+                Xodim Malika Sobirova "Ottimo" korxonasida "Kechikish" sababli ogohlantirilmoqda.
+                Ushbu xodimga juda xushmuomala, lekin jiddiy bo'lgan, kelgusida mehnat intizomiga rioya qilishini so'rovchi professional tushuntirish va ogohlantirish xati matnini o'zbek tilida tayyorlab ber.
+            `;
+            
+            const res = await callGeminiAPI(prompt);
+            if (res) {
+                state.generatedWarning = res;
+                textContent.innerText = res;
+            } else {
+                textContent.innerText = "Error requesting AI service. Try again.";
+            }
+        }
+
+        function closeWarningBlock() {
+            document.getElementById('ai-warning-block').classList.add('hidden');
+        }
+
+        function copyWarningText() {
+            const txt = document.getElementById('ai-warning-text').innerText;
+            // Native clip transfer
+            const el = document.createElement('textarea');
+            el.value = txt;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showNotification("Ogohlantirish nusxalandi!");
+        }
+
+        function handleGlobalSearch(val) {
+            state.searchQuery = val;
+            renderMainContent();
+        }
+
+        function handleLocalSearch(val) {
+            state.searchQuery = val;
+            renderMainContent();
+        }
+
+        window.onload = function() {
+            renderSidebar();
+            renderMainContent();
+        };
+    </script>
 </body>
 </html>
